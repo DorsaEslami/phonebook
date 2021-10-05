@@ -1,5 +1,5 @@
 /* #region  [- import -] */
-import { React, PureComponent } from "react";
+import { React, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   Row,
@@ -14,38 +14,56 @@ import {
 import { postContact } from "./phonebook.action";
 /* #endregion */
 
-class EditContact extends PureComponent {
-  /* #region  [- ctor -] */
-  constructor(props) {
-    super(props);
-    this.state = {
-      /* #region  [- componentFields -] */
-      name: "",
-      phoneNumber: "",
-      /* #endregion */
-    };
-  }
+const EditContact = (props) => {
+  /* #region  [- componentFields -] */
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  /* #endregion */
+
   /* #endregion */
 
   /* #region  [- componentDidMount -] */
-  componentDidMount() {
-    let item = {
-      ...this.props.contactList.filter((x) => x.id === this.props.id)[0],
-    };
-    this.setState({
-      name: item.name,
-      phoneNumber: item.phoneNumber,
-    });
-  }
-  /* #endregion */
+  useEffect(() => {
+    if (
+      Object.keys(props.contactList.filter((x) => x.id === props.id)).length ===
+      1
+    ) {
+      let item = {
+        ...props.contactList.filter((x) => x.id === props.id)[0],
+      };
+
+      setName(item.name);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (
+      Object.keys(props.contactList.filter((x) => x.id === props.id)).length ===
+      1
+    ) {
+      let item = {
+        ...props.contactList.filter((x) => x.id === props.id)[0],
+      };
+
+      setPhoneNumber(item.phoneNumber);
+    }
+  }, []);
 
   /* #region  [- handleChange -] */
 
   /* #region  [- handleChange -] */
-  handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
+  const handleChange = (event) => {
+    switch (event.target.name) {
+      case "name":
+        setName(event.target.value);
+        break;
+      case "phoneNumber":
+        setPhoneNumber(event.target.value);
+        break;
+      default:
+        break;
+    }
   };
   /* #endregion */
 
@@ -54,88 +72,86 @@ class EditContact extends PureComponent {
   /* #region  [- buttons -] */
 
   /* #region  [- save -] */
-  save = async () => {
-    let list = [
-      ...this.props.contactList.filter((x) => x.id !== this.props.id),
-    ];
+  const save = async () => {
+    let list = [...props.contactList.filter((x) => x.id !== props.id)];
     let obj = {
-      id: this.props.id,
-      name: this.state.name,
-      phoneNumber: this.state.phoneNumber,
+      id: props.id,
+      name: name,
+      phoneNumber: phoneNumber,
     };
     list.push(obj);
-    await this.props.postContact(list);
-    this.cancel();
+    await props.postContact(list);
+    cancel();
   };
   /* #endregion */
 
   /* #region  [- cancel -] */
-  cancel = async () => {
-    await this.props.onCloseDrawer();
+  const cancel = async () => {
+    await props.onCloseDrawer();
   };
   /* #endregion */
 
   /* #endregion */
 
   /* #region  [- render -] */
-  render() {
-    return (
-      <Container
-        style={{ textAlign: "left", padding: "2% 2% 0 2%", width: "99%" }}
-      >
-        <Row name="form" style={{ height: "83vh" }}>
-          <Col sm="9" md="9" lg="9">
-            <Form>
-              <FormGroup>
-                <Label for="exampleEmail">Name</Label>
-                <Input
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={this.state.name}
-                  onChange={this.handleChange}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="exampleEmail">Phone Number</Label>
-                <Input
-                  type="number"
-                  name="phoneNumber"
-                  id="phoneNumber"
-                  value={this.state.phoneNumber}
-                  onChange={this.handleChange}
-                />
-              </FormGroup>
-            </Form>
-          </Col>
-        </Row>
 
-        <Row
-          name="buttons"
-          style={{ height: "7vh", paddingBottom: "0", alignItems: "center" }}
-        >
-          <Col sm="12" md="12" lg="12">
-            <Button
-              color="primary"
-              style={{ marginLeft: "2%", fontSize: "10px" }}
-              onClick={this.save}
-            >
-              Save
-            </Button>
-            <Button
-              color="secondary"
-              style={{ marginLeft: "4px", fontSize: "10px" }}
-              onClick={this.cancel}
-            >
-              Cancel
-            </Button>
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
+  return (
+    <Container
+      style={{ textAlign: "left", padding: "2% 2% 0 2%", width: "99%" }}
+    >
+      <Row name="form" style={{ height: "83vh" }}>
+        <Col sm="9" md="9" lg="9">
+          <Form>
+            <FormGroup>
+              <Label for="exampleEmail">Name</Label>
+              <Input
+                type="text"
+                name="name"
+                id="name"
+                value={name}
+                onChange={handleChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="exampleEmail">Phone Number</Label>
+              <Input
+                type="number"
+                name="phoneNumber"
+                id="phoneNumber"
+                value={phoneNumber}
+                onChange={handleChange}
+              />
+            </FormGroup>
+          </Form>
+        </Col>
+      </Row>
+
+      <Row
+        name="buttons"
+        style={{ height: "7vh", paddingBottom: "0", alignItems: "center" }}
+      >
+        <Col sm="12" md="12" lg="12">
+          <Button
+            color="primary"
+            style={{ marginLeft: "2%", fontSize: "10px" }}
+            onClick={save}
+          >
+            Save
+          </Button>
+          <Button
+            color="secondary"
+            style={{ marginLeft: "4px", fontSize: "10px" }}
+            onClick={cancel}
+          >
+            Cancel
+          </Button>
+        </Col>
+      </Row>
+    </Container>
+  );
+
   /* #endregion */
-}
+};
 
 /* #region  [- mapStateToProps -] */
 const mapStateToProps = (state) => {
