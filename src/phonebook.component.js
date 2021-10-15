@@ -17,9 +17,15 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import NewContact from "./newContact.component";
 import { postContact } from "./phonebook.action";
 import EditContact from "./editContact.component";
+import { useSelector } from "react-redux";
 /* #endregion */
 
 const Phonebook = (props) => {
+  /* #region  [- useSelector -] */
+  const contactList = useSelector((state) => state.phonebook[contactList]);
+
+  /* #endregion */
+
   /* #region  [- componentFields -] */
   const [drawerComponent, setDrawerComponent] = useState(<div></div>);
   const [id, setId] = useState("");
@@ -199,7 +205,7 @@ const Phonebook = (props) => {
               defaultColDef={defaultColDef}
               onGridReady={onGridReady}
               onSelectionChanged={onSelectionChanged}
-              rowData={props.contactList}
+              rowData={contactList}
             />
           </div>
         </Row>
@@ -225,14 +231,6 @@ const Phonebook = (props) => {
   /* #endregion */
 };
 
-/* #region  [- mapStateToProps -] */
-const mapStateToProps = (state) => {
-  return {
-    contactList: state.phonebook.contactList,
-  };
-};
-/* #endregion */
-
 /* #region  [- mapDispatchToProps -] */
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -241,4 +239,4 @@ const mapDispatchToProps = (dispatch) => {
 };
 /* #endregion */
 
-export default connect(mapStateToProps, mapDispatchToProps)(Phonebook);
+export default Phonebook;
