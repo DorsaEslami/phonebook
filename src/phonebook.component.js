@@ -17,6 +17,7 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import NewContact from "./newContact.component";
 import { postContact } from "./phonebook.action";
 import EditContact from "./editContact.component";
+import { ContactsFilled } from "@ant-design/icons";
 /* #endregion */
 
 class Phonebook extends PureComponent {
@@ -149,13 +150,13 @@ class Phonebook extends PureComponent {
       >
         <Row name="navbar" style={{ height: "7vh" }}>
           <Navbar color="dark" expand="md" style={{ height: "7vh" }}>
-            <NavbarBrand style={{ padding: "2%" }} href="/">
+            <NavbarBrand style={{ padding: "2%", color: "gray" }} href="/">
               Home
             </NavbarBrand>
-            <NavbarBrand style={{ padding: "2%" }} href="/">
+            <NavbarBrand style={{ padding: "2%", color: "gray" }} href="/">
               Contact us
             </NavbarBrand>
-            <NavbarBrand style={{ padding: "2%" }} href="/">
+            <NavbarBrand style={{ padding: "2%", color: "gray" }} href="/">
               About us
             </NavbarBrand>
           </Navbar>
@@ -172,7 +173,17 @@ class Phonebook extends PureComponent {
         >
           <Row name="header">
             <Col sm="12" md="12" lg="12" name="header">
-              <Label style={{ paddingLeft: "2%" }} for="phonebookHeader">
+              <Label
+                style={{ paddingLeft: "2%", fontSize: "15px" }}
+                for="phonebookHeader"
+              >
+                <ContactsFilled
+                  style={{
+                    color: "blue",
+                    fontSize: "25px",
+                    paddingRight: "2px",
+                  }}
+                />
                 Phonebook
               </Label>
               <hr />
