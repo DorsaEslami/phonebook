@@ -1,6 +1,6 @@
 /* #region  [- import -] */
 import { React, useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Row,
   Col,
@@ -15,6 +15,14 @@ import { postContact } from "./phonebook.action";
 /* #endregion */
 
 const EditContact = (props) => {
+  /* #region  [- useDispatch -] */
+  const dispatch = useDispatch();
+  /* #endregion */
+
+  /* #region  [- useSelector -] */
+  const contactList = useSelector((state) => state.phonebook.contactList);
+  /* #endregion */
+
   /* #region  [- componentFields -] */
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -23,32 +31,33 @@ const EditContact = (props) => {
 
   /* #endregion */
 
-  /* #region  [- componentDidMount -] */
+  /* #region  [- useEffect -] */
   useEffect(() => {
     if (
-      Object.keys(props.contactList.filter((x) => x.id === props.id)).length ===
-      1
+      Object.keys(contactList.filter((x) => x.id === props.id)).length === 1
     ) {
       let item = {
-        ...props.contactList.filter((x) => x.id === props.id)[0],
+        ...contactList.filter((x) => x.id === props.id)[0],
       };
 
       setName(item.name);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (
-      Object.keys(props.contactList.filter((x) => x.id === props.id)).length ===
-      1
-    ) {
-      let item = {
-        ...props.contactList.filter((x) => x.id === props.id)[0],
-      };
-
       setPhoneNumber(item.phoneNumber);
     }
   }, []);
+  /* #endregion */
+
+  // useEffect(() => {
+  //   if (
+  //     Object.keys(props.contactList.filter((x) => x.id === props.id)).length ===
+  //     1
+  //   ) {
+  //     let item = {
+  //       ...props.contactList.filter((x) => x.id === props.id)[0],
+  //     };
+  // setPhoneNumber(item.phoneNumber);
+
+  //   }
+  // }, []);
 
   /* #region  [- handleChange -] */
 
@@ -73,14 +82,14 @@ const EditContact = (props) => {
 
   /* #region  [- save -] */
   const save = async () => {
-    let list = [...props.contactList.filter((x) => x.id !== props.id)];
+    let list = [...contactList.filter((x) => x.id !== props.id)];
     let obj = {
       id: props.id,
       name: name,
       phoneNumber: phoneNumber,
     };
     list.push(obj);
-    await props.postContact(list);
+    await dispatch(postContact(list));
     cancel();
   };
   /* #endregion */
@@ -153,20 +162,4 @@ const EditContact = (props) => {
   /* #endregion */
 };
 
-/* #region  [- mapStateToProps -] */
-const mapStateToProps = (state) => {
-  return {
-    contactList: state.phonebook.contactList,
-  };
-};
-/* #endregion */
-
-/* #region  [- mapDispatchToProps -] */
-const mapDispatchToProps = (dispatch) => {
-  return {
-    postContact: (data) => dispatch(postContact(data)),
-  };
-};
-/* #endregion */
-
-export default connect(mapStateToProps, mapDispatchToProps)(EditContact);
+export default EditContact;

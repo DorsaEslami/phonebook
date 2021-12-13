@@ -1,29 +1,25 @@
 /* #region  [- import -] */
 import { React, useState } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Drawer } from "antd";
-import {
-  Row,
-  Button,
-  Navbar,
-  NavbarBrand,
-  Col,
-  Label,
-  Container,
-} from "reactstrap";
+import { Row, Button, Navbar, NavbarBrand, Col, Label } from "reactstrap";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import NewContact from "./newContact.component";
 import { postContact } from "./phonebook.action";
 import EditContact from "./editContact.component";
-import { useSelector } from "react-redux";
+import { ContactsFilled } from "@ant-design/icons";
+
 /* #endregion */
 
 const Phonebook = (props) => {
-  /* #region  [- useSelector -] */
-  const contactList = useSelector((state) => state.phonebook[contactList]);
+  /* #region  [- useDispatch -] */
+  const dispatch = useDispatch();
+  /* #endregion */
 
+  /* #region  [- useSelector -] */
+  const contactList = useSelector((state) => state.phonebook.contactList);
   /* #endregion */
 
   /* #region  [- componentFields -] */
@@ -105,8 +101,8 @@ const Phonebook = (props) => {
 
   /* #region   [- delete -] */
   const deleteContact = async () => {
-    let list = [...props.contactList.filter((x) => x.id !== id)];
-    await props.postContact(list);
+    let list = [...contactList.filter((x) => x.id !== id)];
+    await dispatch(postContact(list));
     gridApi.deselectAll();
   };
   /* #endregion */
@@ -136,13 +132,13 @@ const Phonebook = (props) => {
     >
       <Row name="navbar" style={{ height: "7vh" }}>
         <Navbar color="dark" expand="md" style={{ height: "7vh" }}>
-          <NavbarBrand style={{ padding: "2%" }} href="/">
+          <NavbarBrand style={{ padding: "2%", color: "gray" }} href="/">
             Home
           </NavbarBrand>
-          <NavbarBrand style={{ padding: "2%" }} href="/">
+          <NavbarBrand style={{ padding: "2%", color: "gray" }} href="/">
             Contact us
           </NavbarBrand>
-          <NavbarBrand style={{ padding: "2%" }} href="/">
+          <NavbarBrand style={{ padding: "2%", color: "gray" }} href="/">
             About us
           </NavbarBrand>
         </Navbar>
@@ -159,7 +155,17 @@ const Phonebook = (props) => {
       >
         <Row name="header">
           <Col sm="12" md="12" lg="12" name="header">
-            <Label style={{ paddingLeft: "2%" }} for="phonebookHeader">
+            <Label
+              style={{ paddingLeft: "2%", fontSize: "15px" }}
+              for="phonebookHeader"
+            >
+              <ContactsFilled
+                style={{
+                  color: "blue",
+                  fontSize: "25px",
+                  paddingRight: "2px",
+                }}
+              />
               Phonebook
             </Label>
             <hr />
@@ -230,13 +236,5 @@ const Phonebook = (props) => {
 
   /* #endregion */
 };
-
-/* #region  [- mapDispatchToProps -] */
-const mapDispatchToProps = (dispatch) => {
-  return {
-    postContact: (data) => dispatch(postContact(data)),
-  };
-};
-/* #endregion */
 
 export default Phonebook;

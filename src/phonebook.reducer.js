@@ -1,4 +1,4 @@
-import * as actionType from "./phonebook.action";
+//import * as actionType from "./phonebook.action";
 
 const initialState = {
   contactList: [],

@@ -1,6 +1,6 @@
 /* #region  [- import -] */
 import { React, useState } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Row,
   Col,
@@ -15,6 +15,14 @@ import { postContact } from "./phonebook.action";
 /* #endregion */
 
 const NewContact = (props) => {
+  /* #region  [- useDispatch -] */
+  const dispatch = useDispatch();
+  /* #endregion */
+
+  /* #region  [- useSelector -] */
+  const contactList = useSelector((state) => state.phonebook.contactList);
+  /* #endregion */
+
   /* #region  [- componentFields -] */
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -45,14 +53,14 @@ const NewContact = (props) => {
   /* #region  [- buttons -] */
 
   const save = async () => {
-    let list = [...props.contactList];
+    let list = [...contactList];
     let obj = {
       id: Math.floor(Math.random() * 100),
       name: name,
       phoneNumber: phoneNumber,
     };
     list.push(obj);
-    await props.postContact(list);
+    await dispatch(postContact(list));
     cancel();
   };
   /* #region  [- cancel -] */
@@ -123,20 +131,4 @@ const NewContact = (props) => {
   /* #endregion */
 };
 
-/* #region  [- mapStateToProps -] */
-const mapStateToProps = (state) => {
-  return {
-    contactList: state.phonebook.contactList,
-  };
-};
-/* #endregion */
-
-/* #region  [- mapDispatchToProps -] */
-const mapDispatchToProps = (dispatch) => {
-  return {
-    postContact: (data) => dispatch(postContact(data)),
-  };
-};
-/* #endregion */
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewContact);
+export default NewContact;
