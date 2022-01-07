@@ -27,6 +27,13 @@ class NewContact extends PureComponent {
   }
   /* #endregion */
 
+  // UNSAFE_componentWillMount() {
+  //   this.props.childRef(this);
+  // }
+  // hi = () => {
+  //   console.log("hi");
+  // };
+
   /* #region  [- handleChange -] */
 
   /* #region  [- handleChange -] */

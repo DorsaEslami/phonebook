@@ -93,11 +93,18 @@ class Phonebook extends PureComponent {
 
   /* #region   [- new -] */
   new = async () => {
-    this.setState({
-      drawerComponent: <NewContact onCloseDrawer={this.onCloseDrawer} />,
+    // let child = "";
+    await this.setState({
+      drawerComponent: (
+        <NewContact
+          onCloseDrawer={this.onCloseDrawer}
+          // childRef={(ref) => (child = ref)}
+        />
+      ),
       isDrawerVisible: true,
       isDrawerDestroyed: false,
     });
+    //  child.hi();
   };
   /* #endregion */
 
