@@ -35,6 +35,7 @@ class Phonebook extends PureComponent {
       isDrawerDestroyed: true,
       isEditDisabled: true,
       isDeleteDisabled: true,
+
       /* #endregion */
 
       /* #region  [- agGrid -] */
